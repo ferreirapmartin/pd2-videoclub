@@ -1,0 +1,142 @@
+{
+	"info": {
+		"_postman_id": "8d4e234d-3489-469b-80c4-1ae4600e2db2",
+		"name": "Rent",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Upsert Renta - XML",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/xml",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/xml",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<rent>\r\n   <object_id>b172a2ab-5900-4532-bd68-68a041152017</object_id>\r\n   <client_id>5d65ac9e-d431-4138-a8e4-c4719203ab1b</client_id>\r\n   <details>\r\n       <status>RENTED</status>\r\n       <until>2020/01/30</until>\r\n   </details>\r\n</rent>",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/rent",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"rent"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Renta - XML",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/xml",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:5000/Rent/b172a2ab-5900-4532-bd68-68a041752017/5d65ac9e-d431-4138-a8e4-c4719205cb1b",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"Rent",
+						"b172a2ab-5900-4532-bd68-68a041752017",
+						"5d65ac9e-d431-4138-a8e4-c4719205cb1b"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Upsert Renta - JSON",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"objectId\": \"b172a2ab-5900-4532-bd68-68b041133017\",\r\n    \"clientId\": \"5d65ac9e-d431-4138-a8e4-c2319203bb1b\",\r\n    \"details\": {\r\n        \"status\": \"RENTED\",\r\n        \"until\": \"2020/10/01\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/rent",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"rent"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Renta - JSON",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:5000/Rent/b172a2ab-5900-4532-bd68-68a041752017/5d65ac9e-d431-4138-a8e4-c4719205cb1b",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"Rent",
+						"b172a2ab-5900-4532-bd68-68a041752017",
+						"5d65ac9e-d431-4138-a8e4-c4719205cb1b"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
