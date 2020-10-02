@@ -1,0 +1,23 @@
+version: "3.8"
+services:
+  api:
+    build:
+      context: .
+    ports:
+      - "5000:80/tcp"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ENV_HOST=host.docker.internal
+    depends_on:
+      - db
+    restart: on-failure
+    container_name: pd2-videoclub-api
+  db:
+    image: "microsoft/mssql-server-linux"
+    ports:
+      - "32632:1433"
+    environment:
+      SA_PASSWORD: "PassStrong!"
+      ACCEPT_EULA: "Y"
+    restart: on-failure
+    container_name: pd2-videoclub-db

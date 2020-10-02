@@ -1,133 +1,177 @@
-# PD II - Videoclub
+# Programación Distribuida II - Videoclub
 
-Para este trabajo, la API REST fue desarrollada con tecnología ASP.NET Core (lenguaje C#), base de datos SQL Server Express LocalDB y se utilizó como ORM, Entity Framework.
+Para este trabajo, la API REST fue desarrollada con tecnología ASP.NET Core (lenguaje C#), base de datos SQL Server y se utilizó como ORM, Entity Framework. 
 
-Como se mencionará luego, la aplicación necesita ejecutarse sobre Windows, esta limitación existe porque utilizo la base da datos SQL Server Express LocalDB, la cual solo funciona en Windows. Consideré que es mejor esta limitación a tener que instalar una base de datos de mayor peso o apuntar a una remota. 
+La aplicación se encuentra contenerizada. 
+
+Se validó correctamente su funcionamiento tanto en Windows como en Linux. Si bien en Mac no se pudo probar, debería funcionar.
 
 ## Comenzando
 
-Todos los comandos que se ejecutarán, a menos que se indique lo contrario, se pueden correr tanto con un CMD como con PowerShell. Además, todos se ejecutarán estando en el directorio root del proyecto, es decir, donde se encuentra la solución (archivo .sln).
+Todos los comandos se ejecutarán, a menos que se indique lo contrario, en el directorio root del proyecto, es decir, donde se encuentra la solución (archivo .sln). Además, en caso de ejecutarse sobre Windows deben hacerse con PowerShell, en Linux o Mac en un Terminal.
 
-La aplicación utilizá Code First de Entity Framework, entonces, en caso de que no exista la base de datos, la creará. 
+La aplicación utiliza Code First de Entity Framework, entonces, en caso de que no exista la base de datos, se creará.
 
 ### Pre-requisitos
 
-Para que la aplicación corra, debe ejecutarse en un sistema operativo Windows 10 (en Windows 7 y 8 debería funcionar, pero no se verificó)
+Para poder desplegar la aplicación, es necesario tener instalado Docker y Docker Compose
 
-### Verificar/Instalar base de datos
+### Verificar/Instalar Docker
 
-La base datos que se utilizó es MSSQLLocalDB, para verificar si se tiene instalado, hay que ejecutar el comando “sqllocaldb info”
+Para verificar si se tiene instalado Docker, hay que ejecutar el comando:
 
-```bat
-sqllocaldb info
+```sh
+docker --version
 ```
 
-Dicho comando, debería retornar
-
-
-```
-MSSQLLocalDB
-```
-
-En caso de no tenerlo instalado, se debe descargar (54MB) e instalar desde el [Centro de Descargas Microsoft](https://download.microsoft.com/download/7/c/1/7c14e92e-bdcb-4f89-b7cf-93543e7112d1/SqlLocalDB.msi)
-
-
-### Verificar/Instalar SDK .NET Core 3.1
-
-Para correr la aplicación (compilar, ejecutar y testear) es necesario tener instalado .NET Core 3.1 SDK. Para verificar esto, se debe correr el comando “dotnet --list-sdks”
-
-```bat
-dotnet --list-sdks
-```
-Se debería observar algo como lo siguiente:
-
-```bat
-3.1.100 [C:\Program Files\dotnet\sdk]
-```
-
-Si se tiene más de una versión instalada se vería una lista. Verificar que se tenga instalada la versión 3.1.X
-
-En caso de no tenerlo instalado, se debe descargar (125MB) e instalar desde [Dotnet Microsoft](https://dotnet.microsoft.com/download/dotnet-core/thank-you/sdk-3.1.301-windows-x64-installer)
-
-
-### Instalar dependencias Nuget
-
-Para instalar las dependencias utilizadas en la solución, es necesario ejecutar
-
-```cmd
-dotnet restore
-```
-
-Se debería ver algo como:
+Dicho comando, debería retornar algo parecido a:
 
 ```
-  Restore completed in 41,02 ms for ...\src\Domain\Domain.csproj.
-  Restore completed in 65,63 ms for ...\src\DataAccess\DataAccess.csproj.
-  Restore completed in 65,63 ms for ...\src\ApiRest\ApiRest.csproj.
-  Restore completed in 66,63 ms for ...\test\ApiRestTests\ApiRestTests.csproj.
+Docker version 19.03.12, build 48a66213fe
 ```
+
+En caso de no tenerlo instalado, se debe descargar e instalar desde [aquí](https://docs.docker.com/engine/install/) siguiendo las instrucciones según el SO operativo utilizado.
+
+
+### Verificar/Instalar Docker Compose
+
+Para verificar si se tiene instalado Docker Compose, hay que ejecutar el comando:
+
+```sh
+docker-compose --version
+```
+Este comando, debería retornar algo parecido a:
+
+```
+docker-compose version 1.27.2, build 18f557f9
+```
+
+En caso de no tenerlo instalado, se debe descargar e instalar desde [aquí](https://docs.docker.com/compose/install) siguiendo las instrucciones según el SO operativo utilizado.
 
 ## Ejecutando las pruebas
 
-Para ejecutar las pruebas unitarias es necesario correr
+Para ejecutar las pruebas unitarias es necesario correr:
+
+En Windows
+```
+.\run-tests-in-docker.ps1
+```
+
+En Linux o Mac
+```
+./run-tests-in-docker.sh
+```
+
+> En Linux o Mac es posible que se necesiten agregar, por única vez, permisos de ejecución al usuario. Para ello, se debe correr:
+> ```sh
+> chmod +x run-tests-in-docker.sh
+> ```
+
+
+Una vez ejecutado el script run-tests-in-docker, se debería visualizar el resultado del test. Por ejemplo:
 
 ```
-dotnet test
-```
+...
+A total of 1 test files matched the specified pattern.
+Html test results file : /src/TestResults/TestResult__4a247e9f9950_20201003_031112.html
 
-Una vez hecho esto, se debería visualizar el resultado del test. Por ejemplo:
-
-```
 Test Run Successful.
-Total tests: 24
-     Passed: 24
- Total time: 9,5861 Seconds
+Total tests: 23
+     Passed: 23
+ Total time: 2.8302 Seconds
+Removing intermediate container 4a247e9f9950
+ ---> 140a51770697
+Successfully built 140a51770697
+Successfully tagged pd2-videoclub:test
+...
 ```
 
-## Publicando la aplicación
+Además, se debería crear un archivo en la carpeta `testresult` del directorio root del proyecto (si no existe la carpeta, también se debería crear) con un archivo HTML con el detalle de la ejecución. Según la salida de ejemplo previa, debería haberse creado `testresult/TestResult__4a247e9f9950_20201003_031112.html`
 
-Para publicar la aplicación, es necesario ejecutar el siguiente comando (se creará una carpeta llamada `publish` en el directorio root con los binarios):
+> Este archivo se copia desde el container al Host.
 
-```bat
-dotnet publish "src/ApiRest/ApiRest.csproj" -c Release -o ./publish
+## Creando imagen y contenedores
+
+Para crear la imagen, se debe ejecutar:
+
+```sh
+docker-compose build
 ```
 
 Se debería ver algo como lo siguiente:
 
-```bat
-Microsoft (R) Build Engine version 16.4.0+e901037fe for .NET Core
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-  Restore completed in 37,49 ms for ...\src\Domain\Domain.csproj.
-  Restore completed in 70,67 ms for ...\src\ApiRest\ApiRest.csproj.
-  Restore completed in 70,68 ms for ...\src\DataAccess\DataAccess.csproj.
-  Domain -> ...\src\Domain\bin\Release\netcoreapp3.1\Domain.dll
-  DataAccess -> ...\src\DataAccess\bin\Release\netcoreapp3.1\DataAccess.dll
-  ApiRest -> ...\src\ApiRest\bin\Release\netcoreapp3.1\ApiRest.dll
-  ApiRest -> ...\publish\
+```
+db uses an image...
+...
+Step 1/17 : FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
+ ---> c4155a9104a8
+Step 2/17 : WORKDIR /src
+ ---> Using cache
+ ---> b2306ce8a0ac
+Step 3/17 : COPY ["src/ApiRest/ApiRest.csproj", "src/ApiRest/"]
+ ---> Using cache
+ ---> 485020133c34
+Step 4/17 : RUN dotnet restore "src/ApiRest/ApiRest.csproj"
+ ---> Using cache
+ ---> 01def73b2b9a
+Step 5/17 : COPY . .
+ ---> 4dc215a1c7bc
+Step 6/17 : WORKDIR "/src/src/ApiRest"
+ ---> Running in 329e460600af
+Removing intermediate container 329e460600af
+ ---> 88753f289445
+Step 7/17 : RUN dotnet build "ApiRest.csproj" -c Release -o /app/build
+ ---> Running in 7e710e9ff85d
+Microsoft (R) Build Engine version 16.7.0+7fb82e5b2 for .NET
+Copyright (C) Microsoft Corporation. All rights reserved
+...
 ```
 
-## Ejecutando la aplicación
+Una vez creada la imagen de la API, para crear los contenedores (de la base de datos y de la API), es necesario ejecutar:
 
-Para correr la aplicación, es necesario ejecutar el siguiente comando:
-
-```bat
-dotnet run --project "src/ApiRest/ApiRest.csproj"
+```sh
+docker-compose up
 ```
 
-Se debería ver algo como lo siguiente (notar que se indica el puerto donde comenzó a correr):
+Una vez hecho esto, se debería ver algo como
 
-```bat
-info: Microsoft.Hosting.Lifetime[0]
-      Now listening on: http://localhost:5000
-info: Microsoft.Hosting.Lifetime[0]
-      Application started. Press Ctrl+C to shut down.
-info: Microsoft.Hosting.Lifetime[0]
-      Hosting environment: Development
-info: Microsoft.Hosting.Lifetime[0]
-      Content root path: ...\src\ApiRest
+```
+...
+Creating network "pd2-videoclub_default" with the default driver
+Creating pd2-videoclub-db       ... done
+Creating pd2-videoclub-api      ... done
+...
+2020-10-03 03:49:36.17 spid22s     The Database Mirroring endpoint is in disabled or stopped state.
+2020-10-03 03:49:36.20 spid22s     Service Broker manager has started.
+2020-10-03 03:49:36.31 spid6s      Recovery is complete. This is an informational message only...
+2020-10-03 03:49:36.36 spid24s     The default language (LCID 0) has been set for engine and f...
+pd2-videoclub-api | info: ApiRest.Startup[0]
+pd2-videoclub-api |       Se puede inicializar la base de datos correctamente
+pd2-videoclub-api | info: Microsoft.Hosting.Lifetime[0]
+pd2-videoclub-api |       Now listening on: http://[::]:80
+pd2-videoclub-api | info: Microsoft.Hosting.Lifetime[0]
+pd2-videoclub-api |       Application started. Press Ctrl+C to shut down.
+pd2-videoclub-api | info: Microsoft.Hosting.Lifetime[0]
+pd2-videoclub-api |       Hosting environment: Development
+pd2-videoclub-api | info: Microsoft.Hosting.Lifetime[0]
+pd2-videoclub-api |       Content root path: /app
+```
+
+Con esto, la base de datos quedará expuesta en el puerto 32632 y la API en el 5000
+
+## Iniciando o deteniendo los contenedores
+
+Una vez que los contenedores están creados, se puede detener la ejecución de ambos, con:
+
+```sh
+docker-compose stop
+```
+Y volver a iniciarlas con
+
+```sh
+docker-compose start
 ```
 
 ## Ejemplos
 
-Dentro de la carpeta `postman` se encuetra una colección de [Postman](https://www.postman.com/downloads/) con ejemplos de llamadas a la API.
+Dentro de la carpeta [`postman`](postman) se encuetra una colección de [Postman](https://www.postman.com/downloads/) con ejemplos de llamadas a la API.
