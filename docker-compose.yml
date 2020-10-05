@@ -7,7 +7,7 @@ services:
       - "5000:80/tcp"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ENV_HOST=host.docker.internal
+      - ENV_HOST=db
     depends_on:
       - db
     restart: on-failure
