@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="rent">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="object_id" type="UUID" />
+        <xs:element name="client_id" type="UUID" />
+        <xs:element name="details">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="status" type="status" />
+              <xs:element name="until" type="date" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:simpleType name="UUID">
+    <xs:annotation>
+      <xs:documentation xml:lang="es">
+        Representación de UUID
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})|(\{[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\})"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="status">
+    <xs:annotation>
+      <xs:documentation xml:lang="es">
+        Lista de valores que representan el estado de la Renta
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="RENTED" />
+      <xs:enumeration value="DELIVERY_TO_RENT" />
+      <xs:enumeration value="RETURN" />
+      <xs:enumeration value="DELIVERY_TO_RETURN" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="date">
+    <xs:annotation>
+      <xs:documentation xml:lang="es">
+        Representación de una Fecha con formato AAAA/MM/DD
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <!--Profe: es lo máximo que pude validar de la fecha. No intenté validar la cantidad de días 
+                 por mes (por ejemplo, la fecha 2020/02/30 no da error) porque creo que complejizaría
+                 mucho la expresión regular y no es el fin del TP. Además, podría validar la cantidad 
+                 de días  de cada mes, sin embargo, creo que no hay manera de validar febrero correcamente 
+                 para años bisiesto (por lo menos, no se me ocurre nada)
+          Validaciones: 
+                - Año: 
+                      - que inicie con 19 o 20 + 2 dígitos  (matchearía desde 1900 a 2099)
+                - Mes: 
+                      - que inicie 0 + un dígito del 1 al 9 (matchearía desde 00 a 09)
+                      - que inicie 1 + un dígito del 0 al 2 (matchearía desde 10 a 12)
+                - Día: 
+                      - que inicie 0 + un dígito del 1 al 9 (matchearía desde 00 a 09)
+                      - que inicie 1 o 2 + un dígito del 0 al 9 (matchearía desde 10 a 29)
+                      - que inicie 3 + 0 o 1 (matchearía 30 o 31)
+      -->
+      <xs:pattern value="(19|20)\d{2}[/](0[1-9]|1[0-2])[/](0[1-9]|[12][0-9]|3[01])"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

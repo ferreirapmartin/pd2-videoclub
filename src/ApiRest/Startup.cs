@@ -5,10 +5,12 @@ using DataAccess.Configuration;
 using DataAccess.Contexts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace ApiRest
@@ -26,9 +28,15 @@ namespace ApiRest
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers().AddXmlSerializerFormatters();
+            services.AddApiVersioning(config =>
+            {
+                config.DefaultApiVersion = new ApiVersion(1, 0);
+                config.AssumeDefaultVersionWhenUnspecified = true;
+            });
             services.AddLogging();
             services.AddScoped<IVideoclubDbContext, VideoclubDbContext>();
             services.AddSingleton<StatusHelper, StatusHelper>();
+            services.AddSingleton<IRentXmlSchemaValidator>((sp) => new RentXmlSchemaValidator(Path.Combine("Schemas", "rent_request.xsd")));
 
             ConfigAutoMapper(services);
         }

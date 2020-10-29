@@ -23,7 +23,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "<rent>\r\n   <object_id>b172a2ab-5900-4532-bd68-68a041152017</object_id>\r\n   <client_id>5d65ac9e-d431-4138-a8e4-c4719203ab1b</client_id>\r\n   <details>\r\n       <status>RENTED</status>\r\n       <until>2020/01/30</until>\r\n   </details>\r\n</rent>",
+					"raw": "<rent>\r\n   <object_id>b172a2ab-5900-4532-bd68-68a041152028</object_id>\r\n   <client_id>5d65ac9e-d431-4138-a8e4-c4719203ab1b</client_id>\r\n   <details>\r\n       <status>RENTED</status>\r\n       <until>2020/01/30</until>\r\n   </details>\r\n</rent>",
 					"options": {
 						"raw": {
 							"language": "xml"
@@ -31,13 +31,15 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:5000/rent",
+					"raw": "http://localhost:5000/api/v1/rent",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "5000",
 					"path": [
+						"api",
+						"v1",
 						"rent"
 					]
 				}
@@ -56,13 +58,15 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:5000/Rent/b172a2ab-5900-4532-bd68-68a041752017/5d65ac9e-d431-4138-a8e4-c4719205cb1b",
+					"raw": "http://localhost:5000/api/v1/Rent/b172a2ab-5900-4532-bd68-68a041752017/5d65ac9e-d431-4138-a8e4-c4719205cb1b",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "5000",
 					"path": [
+						"api",
+						"v1",
 						"Rent",
 						"b172a2ab-5900-4532-bd68-68a041752017",
 						"5d65ac9e-d431-4138-a8e4-c4719205cb1b"
@@ -97,13 +101,15 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:5000/rent",
+					"raw": "http://localhost:5000/api/v1/rent",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "5000",
 					"path": [
+						"api",
+						"v1",
 						"rent"
 					]
 				}
@@ -122,16 +128,60 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:5000/Rent/b172a2ab-5900-4532-bd68-68a041752017/5d65ac9e-d431-4138-a8e4-c4719205cb1b",
+					"raw": "http://localhost:5000/api/v1/rent/b172a2ab-5900-4532-bd68-68a041752017/5d65ac9e-d431-4138-a8e4-c4719205cb1b",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "5000",
 					"path": [
-						"Rent",
+						"api",
+						"v1",
+						"rent",
 						"b172a2ab-5900-4532-bd68-68a041752017",
 						"5d65ac9e-d431-4138-a8e4-c4719205cb1b"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "API v2 | Upsert Renta - XML",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/xml"
+					},
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "text/plain",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<rent>\r\n   <object_id>b172a2ab-5900-4532-bd68-68a041152037</object_id>\r\n   <client_id>5d65ac9e-d431-4138-a8e4-c4719203ab1b</client_id>\r\n   <details>\r\n       <status>RENTED</status>\r\n       <until>2020/01/20</until>\r\n   </details>\r\n</rent>",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/v2/rent",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"v2",
+						"rent"
 					]
 				}
 			},

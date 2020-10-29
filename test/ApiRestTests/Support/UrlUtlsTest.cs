@@ -20,6 +20,7 @@ namespace ApiRestTests.Support
             var mapperMock = new Mock<IMapper>();
             var urlHelperMock = new Mock<IUrlHelper>(MockBehavior.Strict);
             var statusHelperMock = new Mock<StatusHelper>();
+            var xmlSchemaValidatorMock = new Mock<IRentXmlSchemaValidator>();
             var requestMock = new Mock<HttpRequest>();
             var httpContextMock = Mock.Of<HttpContext>(_ => _.Request == requestMock.Object);
             var controllerContext = new ControllerContext() { HttpContext = httpContextMock };
@@ -31,7 +32,7 @@ namespace ApiRestTests.Support
             requestMock.Setup(x => x.Scheme).Returns(scheme);
             urlHelperMock.Setup(url => url.Action(It.IsAny<UrlActionContext>())).Returns("mock/url");
 
-            var controller = new RentController(serviceProviderMock.Object, mapperMock.Object)
+            var controller = new RentController(serviceProviderMock.Object, mapperMock.Object, xmlSchemaValidatorMock.Object)
             {
                 ControllerContext = controllerContext,
                 Url = urlHelperMock.Object

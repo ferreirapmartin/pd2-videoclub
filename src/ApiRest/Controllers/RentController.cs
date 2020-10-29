@@ -7,23 +7,29 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace ApiRest.Controllers
 {
+    [ApiVersion("1.0")]
+    [ApiVersion("2.0")]
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class RentController : ControllerBase
     {
         private readonly IServiceProvider serviceProvider;
         private readonly IMapper mapper;
+        private readonly IRentXmlSchemaValidator rentXmlSchemaValidator;
 
-        public RentController(IServiceProvider serviceProvider, IMapper mapper)
+        public RentController(IServiceProvider serviceProvider, IMapper mapper, IRentXmlSchemaValidator rentXmlSchemaValidator)
         {
             this.serviceProvider = serviceProvider;
             this.mapper = mapper;
+            this.rentXmlSchemaValidator = rentXmlSchemaValidator;
         }
 
         private async Task<Rent> GetRent(IVideoclubDbContext ctx, Guid productId, Guid clientId)
@@ -31,6 +37,19 @@ namespace ApiRest.Controllers
                                       .FirstOrDefaultAsync()
                                       .ConfigureAwait(false);
 
+
+        private async Task<string> GetBody()
+        {
+            using var reader = new StreamReader(Request.Body, Encoding.UTF8);
+            return await reader.ReadToEndAsync().ConfigureAwait(false);
+        }
+
+        private RentRequest DeserializeXml(string xmlString)
+        {
+            var serializer = new XmlSerializer(typeof(RentRequest));
+            using TextReader reader = new StringReader(xmlString);
+            return (RentRequest)serializer.Deserialize(reader);
+        }
 
         [HttpGet("{productId}/{clientId}")]
         public async Task<IActionResult> Get(Guid productId, Guid clientId)
@@ -70,8 +89,25 @@ namespace ApiRest.Controllers
 
             var result = mapper.Map<RentResponse>(rent);
 
-            return isNew ? Created(UrlUtls.URI(this, nameof(RentController), nameof(RentController.Get), new { productId, clientId }), result)
+            return isNew ? Created(UrlUtls.URI(this, nameof(RentController), nameof(RentController.Get), new { productId, clientId, version = "1.0" }), result)
                          : (IActionResult)Ok(result);
+        }
+
+        [HttpPut]
+        [MapToApiVersion("2.0")]
+        [Consumes("application/xml")]
+        public async Task<IActionResult> PutV2()
+        {
+            var xmlBody = await GetBody().ConfigureAwait(false);
+            var errors = rentXmlSchemaValidator.Validate(xmlBody);
+            if (errors.Any())
+            {
+                foreach (var error in errors)
+                    ModelState.AddModelError(string.Empty, error);
+                return ValidationProblem();
+            }
+            
+            return await Put(DeserializeXml(xmlBody)).ConfigureAwait(false);
         }
     }
 }
