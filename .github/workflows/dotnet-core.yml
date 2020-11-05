@@ -1,4 +1,4 @@
-name: .NET Core
+name: 'build and test'
 
 on:
   push:
@@ -22,4 +22,8 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release --no-restore
     - name: Test
-      run: dotnet test --no-restore --verbosity normal
+      run: dotnet test --no-restore --verbosity minimal --logger html -r TestResults --settings coverlet.runsettings
+    - name: Publish coverage report to coveralls.io
+      uses: codecov/codecov-action@v1
+      with:
+        file: ./TestResults/**/coverage.info
