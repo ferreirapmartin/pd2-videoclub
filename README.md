@@ -1,5 +1,8 @@
 # Programación Distribuida II - Videoclub
 
+![Status Tests](https://github.com/ferreirapmartin/pd2-videoclub2/workflows/build%20and%20test/badge.svg)
+[![codecov](https://codecov.io/gh/ferreirapmartin/pd2-videoclub/branch/master/graph/badge.svg?token=TR5EI24NJA)](https://codecov.io/gh/ferreirapmartin/pd2-videoclub)
+
 Para este trabajo, la API REST fue desarrollada con tecnología ASP.NET Core (lenguaje C#), base de datos SQL Server y se utilizó como ORM, Entity Framework. 
 
 La aplicación se encuentra contenerizada. 
