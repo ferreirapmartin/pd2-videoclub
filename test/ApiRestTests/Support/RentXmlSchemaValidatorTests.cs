@@ -21,7 +21,7 @@ namespace ApiRestTests.Support
             var dirPath = Path.GetDirectoryName(codeBasePath);
             return Path.Combine(dirPath, relativePath);
         }
-        
+
         [Fact]
         public void ShouldValidationBeSuccessfulWithValidXml()
         {
@@ -40,6 +40,24 @@ namespace ApiRestTests.Support
 
             // Assert
             Assert.Empty(errors);
+        }
+
+        [Fact]
+        public void ShouldValidateXmlStructure()
+        {
+            // Arrange
+            var xml = @"<rent>
+                           <object_id>b172a2ab-5900-4532-bd68-68a04115201a</object_id>
+                           <client_id>5d65ac9e-d431-4138-a8e4-c4719203ab1b</client_id>
+                           <det";
+            var messageExpected = Constants.ValidationMessages.InvalidXml;
+
+            // Act
+            var errors = xmlSchemaValidator.Validate(xml);
+
+            // Assert
+            Assert.Single(errors);
+            Assert.Equal(messageExpected, errors[0]);
         }
 
         [Fact]
