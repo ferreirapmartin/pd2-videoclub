@@ -56,14 +56,26 @@ namespace ApiRestTests.Support
         public void ShouldParseSuccessfullyWhenStatusIsCorrect()
         {
             // Arrange
-            var status = Constants.StatusName.DeliveryToRent;
-            var expected = Status.DeliveryToRent;
-            
+            var statusDeliveryToRent = Constants.StatusName.DeliveryToRent;
+            var statusDeliveryToReturn = Constants.StatusName.DeliveryToReturn;
+            var statusRented = Constants.StatusName.Rented;
+            var statusReturn = Constants.StatusName.Return;
+            var expectedDeliveryToRent = Status.DeliveryToRent;
+            var expectedDeliveryToReturn = Status.DeliveryToReturn;
+            var expectedRentend = Status.Rentend;
+            var expectedReturn = Status.Return;
+
             // Act
-            var actual = StatusHelper.Parse(status);
+            var actualDeliveryToRent = StatusHelper.Parse(statusDeliveryToRent);
+            var actualStatusDeliveryToReturn = StatusHelper.Parse(statusDeliveryToReturn);
+            var actualStatusRented = StatusHelper.Parse(statusRented);
+            var actualStatusReturn = StatusHelper.Parse(statusReturn);
 
             // Assert
-            Assert.Equal(expected, actual);
+            Assert.Equal(expectedDeliveryToRent, actualDeliveryToRent);
+            Assert.Equal(expectedDeliveryToReturn, actualStatusDeliveryToReturn);
+            Assert.Equal(expectedRentend, actualStatusRented);
+            Assert.Equal(expectedReturn, actualStatusReturn);
         }
 
         [Fact]
@@ -99,14 +111,42 @@ namespace ApiRestTests.Support
         public void ShouldParseToStringSuccessfullyWhenIsKnownStatus()
         {
             // Arrange
-            var status = Status.DeliveryToRent;
-            var expected = Constants.StatusName.DeliveryToRent;
+            var statusDeliveryToRent = Status.DeliveryToRent;
+            var statusDeliveryToReturn = Status.DeliveryToReturn;
+            var statusRentend = Status.Rentend;
+            var statusReturn = Status.Return;
+            var expectedDeliveryToRent = Constants.StatusName.DeliveryToRent;
+            var expectedDeliveryToReturn = Constants.StatusName.DeliveryToReturn;
+            var expectedRented = Constants.StatusName.Rented;
+            var expectedReturn = Constants.StatusName.Return;
 
             // Act
-            var actual = StatusHelper.Parse(status);
+            var actualStatusDeliveryToRent = StatusHelper.Parse(statusDeliveryToRent);
+            var actualStatusDeliveryToReturn = StatusHelper.Parse(statusDeliveryToReturn);
+            var actualStatusRentend = StatusHelper.Parse(statusRentend);
+            var actualstatusReturn = StatusHelper.Parse(statusReturn);
 
             // Assert
-            Assert.Equal(expected, actual);
+            Assert.Equal(expectedDeliveryToRent, actualStatusDeliveryToRent);
+            Assert.Equal(expectedDeliveryToReturn, actualStatusDeliveryToReturn);
+            Assert.Equal(expectedRented, actualStatusRentend);
+            Assert.Equal(expectedReturn, actualstatusReturn);
+        }
+
+        [Fact]
+        public void ShouldThrowAnInvalidCastExceptionWhenStatusIsInvalid()
+        {
+            // Arrange
+            var invalidStatus = (Status)int.MaxValue;
+            var messageExpected = Constants.ExceptionsMessages.InvalidCastStatus;
+
+            // Act
+            var exp = Record.Exception(() => StatusHelper.Parse(invalidStatus));
+
+            // Assert
+            Assert.NotNull(exp);
+            Assert.IsType<InvalidCastException>(exp);
+            Assert.Equal(messageExpected, exp.Message);
         }
     }
 }

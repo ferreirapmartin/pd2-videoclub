@@ -8,6 +8,7 @@
             public const string FormatUUID = "El campo {0} debe ser un UUID válido";
             public const string FormatDate = "El campo {0} debe ser una fecha válida";
             public const string Status = "El campo {0} debe ser un estado válído";
+            public const string InvalidXml = "El XML no es válido";
         }
 
         public static class ExceptionsMessages

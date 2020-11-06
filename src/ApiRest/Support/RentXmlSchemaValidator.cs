@@ -36,7 +36,7 @@ namespace ApiRest.Support
             }
             catch (XmlException)
             {
-                errors.Add("El XML no es válido");
+                errors.Add(Constants.ValidationMessages.InvalidXml);
             }
 
             return errors.ToArray();

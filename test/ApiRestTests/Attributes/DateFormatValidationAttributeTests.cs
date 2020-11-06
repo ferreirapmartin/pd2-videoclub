@@ -10,7 +10,7 @@ namespace ApiRestTests.Attributes
         [Fact]
         public void ShouldUseDateHelperToValidate()
         {
-            // Assert
+            // Arrange
             var dateHelperMock = new Mock<DateHelper>(MockBehavior.Strict);
             var attr = new DateFormatValidationAttribute(dateHelperMock.Object);
             var dateStr = "2020/10/10";
@@ -28,7 +28,7 @@ namespace ApiRestTests.Attributes
         [Fact]
         public void ShouldBeValidWhenDateIsNull()
         {
-            // Assert
+            // Arrange
             var attr = new DateFormatValidationAttribute();
             var date = (object)null;
 

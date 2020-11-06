@@ -19,7 +19,7 @@ namespace Domain.Entities
         /// <param name="clientId">Id del Cliente</param>
         /// <param name="status">Status</param>
         /// <param name="until">Fecha hasta</param>
-        public Rent(Guid productId, Guid clientId, Status status, DateTime? until)
+        public Rent(Guid productId, Guid clientId, Status status, DateTime? until) : this()
         {
             ProductId = productId;
             ClientId = clientId;

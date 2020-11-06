@@ -1,6 +1,7 @@
 using ApiRest.Attributes;
 using ApiRest.Support;
 using Moq;
+using System;
 using Xunit;
 
 namespace ApiRestTests.Attributes
@@ -10,7 +11,7 @@ namespace ApiRestTests.Attributes
         [Fact]
         public void ShouldUseStatusHelperToValidate()
         {
-            // Assert
+            // Arrange
             var statusHelperMock = new Mock<StatusHelper>(MockBehavior.Strict);
             var attr = new StatusValidationAttribute(statusHelperMock.Object);
             var status = "Asd";
@@ -28,7 +29,7 @@ namespace ApiRestTests.Attributes
         [Fact]
         public void ShouldBeValidWhenStatusIsNull()
         {
-            // Assert
+            // Arrange
             var attr = new StatusValidationAttribute();
             object invalidStatus = null;
 
@@ -37,6 +38,20 @@ namespace ApiRestTests.Attributes
 
             // Assert
             Assert.True(isValid);
+        }
+
+        [Fact]
+        public void ShouldThrowAnArgumentNullExceptionWhenStatusHelperIsNull()
+        {
+            // Arrange
+            StatusHelper statusHelper = null;
+
+            // Act 
+            var exp = Record.Exception(() => new StatusValidationAttribute(statusHelper));
+
+            // Assert
+            Assert.NotNull(exp);
+            Assert.IsType<ArgumentNullException>(exp);
         }
     }
 }
